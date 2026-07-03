@@ -330,12 +330,8 @@
   <div class="container mx-auto px-6 lg:px-16 relative z-10 text-center">
     <div class="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm px-6 py-8 md:px-10 md:py-10 border border-white/20 shadow-2xl rounded-sm">
       <span id="heroKicker" class="text-[10px] uppercase tracking-[0.3em] font-bold text-gold-200">Trusted Since 2010</span>
-      <h1 id="heroHeadline" class="font-serif text-4xl md:text-6xl font-light text-white leading-tight mt-2">
-        Precision. Integrity. <br /><span class="font-semibold text-gold-300">Trust.</span>
-      </h1>
-      <p id="heroSubcopy" class="text-white/80 text-sm md:text-base font-light mt-4 max-w-md mx-auto leading-relaxed">
-        Expert gemological appraisals and fine jewelry.
-      </p>
+      <h1 id="heroHeadline" class="font-serif text-4xl md:text-6xl font-light text-white leading-tight mt-2">&nbsp;</h1>
+      <p id="heroSubcopy" class="text-white/80 text-sm md:text-base font-light mt-4 max-w-md mx-auto leading-relaxed">&nbsp;</p>
       <div class="flex flex-wrap justify-center gap-4 mt-8 text-[10px] uppercase tracking-widest font-bold">
         <a href="#contact" class="btn-primary px-8 py-3.5 shadow-md inline-flex items-center gap-2">
           <i class="fa-regular fa-calendar-check"></i> Book an Appraisal
@@ -847,10 +843,18 @@
       setInterval(() => {
         heroIndex = (heroIndex + 1) % heroRotator.length;
         const item = heroRotator[heroIndex];
+        // Update hero copy without flashing layout
         kickerEl.textContent = item.kicker;
         headlineEl.innerHTML = item.headline;
         subcopyEl.textContent = item.subcopy;
-      }, 5500);
+      }, 5000);
+    }
+
+    // Start with first item immediately (no initial empty state)
+    if (heroRotator[0]) {
+      kickerEl.textContent = heroRotator[0].kicker;
+      headlineEl.innerHTML = heroRotator[0].headline;
+      subcopyEl.textContent = heroRotator[0].subcopy;
     }
   })();
 </script>
