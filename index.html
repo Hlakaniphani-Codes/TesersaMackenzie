@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Teresa Mackenzie | Gemological Appraisals & Fine Jewelry</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charcoal: {
+              50: '#F8F8F9', 100: '#EDEEF0', 200: '#D5D7DC', 300: '#B6B9C0',
+              400: '#8F929C', 500: '#6C707C', 600: '#4B4F5A', 700: '#323640',
+              800: '#1C1F26', 900: '#0B0D11'
+            },
+            gold: {
+              50: '#FCFAF5', 100: '#F8F2E4', 200: '#F0E4C9', 300: '#E6D3A9',
+              400: '#D9BE85', 500: '#C9A864', 600: '#B79046', 700: '#9C7631',
+              800: '#7D5D20', 900: '#5E4314'
+            }
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Montserrat', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ─── Base Styles ─── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', sans-serif; background: #ffffff; color: #1C1F26; -webkit-font-smoothing: antialiased; }
+
+    /* ─── Scroll Reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Luxury Card ─── */
+    .card-luxury {
+      border: 1px solid #EDEEF0;
+      background: #ffffff;
+      transition: all 0.4s ease;
+    }
+    .card-luxury:hover {
+      border-color: #C9A864;
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    /* ─── Gold Underline Hover ─── */
+    .hover-gold-underline {
+      position: relative;
+    }
+    .hover-gold-underline::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 1.5px;
+      bottom: -4px;
+      left: 0;
+      background: #C9A864;
+      transform-origin: bottom right;
+      transition: transform 0.3s ease;
+    }
+    .hover-gold-underline:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    /* ─── Hero Slideshow ─── */
+    .hero-slideshow {
+      position: relative;
+      overflow: hidden;
+      min-height: 70vh;
+      background: #0B0D11;
+    }
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.6s cubic-bezier(0.23, 1, 0.32, 1);
+      z-index: 0;
+    }
+    .slide-bg.active { opacity: 1; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ─── Mobile Menu ─── */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 300px;
+      height: 100vh;
+      background: #ffffff;
+      z-index: 1000;
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 1px solid #EDEEF0;
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+    }
+    .mobile-menu.open { right: 0; }
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+    }
+    .backdrop.visible { opacity: 1; visibility: visible; }
+
+    /* ─── Dropdown (hover) ─── */
+    .nav-dropdown {
+      position: fixed;
+      background: #ffffff;
+      border: 1px solid #EDEEF0;
+      border-top: 3px solid #C9A864;
+      border-radius: 8px;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08);
+      width: 260px;
+      z-index: 10000;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s ease;
+    }
+    .nav-dropdown.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 1rem;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: #1C1F26;
+    }
+    .dropdown-item:hover {
+      background: #FCFAF5;
+      border-left-color: #C9A864;
+    }
+    .dropdown-item .icon { color: #B79046; font-size: 0.7rem; min-width: 20px; text-align: center; }
+    .dropdown-item .title { font-weight: 700; font-size: 0.65rem; letter-spacing: 0.03em; text-transform: uppercase; color: #0B0D11; }
+    .dropdown-item .desc { font-size: 0.6rem; color: #6C707C; }
+    .dropdown-header {
+      padding: 0.5rem 1rem 0.3rem;
+      border-bottom: 1px solid #F0E4C9;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      color: #9C7631;
+    }
+
+    /* ─── Buttons ─── */
+    .btn-primary {
+      background: #1C1F26;
+      color: #fff;
+      border: 1px solid #1C1F26;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: #C9A864;
+      border-color: #C9A864;
+      color: #0B0D11;
+    }
+    .btn-outline {
+      border: 2px solid #1C1F26;
+      color: #1C1F26;
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background: #1C1F26;
+      color: #fff;
+    }
+    .btn-outline-light {
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+    .btn-outline-light:hover {
+      background: #ffffff;
+      color: #0B0D11;
+    }
+
+    /* ─── Typography Helpers ─── */
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+    .section-subtitle {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 600;
+      color: #B79046;
+    }
+    .gold-line {
+      width: 60px;
+      height: 2px;
+      background: #C9A864;
+      margin: 0.5rem auto 1rem;
+    }
+
+    /* ─── Read More Toggle ─── */
+    .read-more-content {
+      display: none;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #4B4F5A;
+      line-height: 1.6;
+    }
+    .read-more-content.open {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .section-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOP BAR ═══════════════════ -->
+<div class="bg-charcoal-900 text-white text-[10px] tracking-widest uppercase text-center py-2.5 border-b border-gold-700/30 font-semibold">
+  <span class="inline-flex items-center gap-1"><i class="fa-regular fa-gem text-gold-500 text-[9px]"></i></span>
+  Trusted Gemological Appraiser · 15+ Years Excellence · Serving Trade & Collectors
+  <span class="inline-flex items-center gap-1 ml-1"><i class="fa-regular fa-gem text-gold-500 text-[9px]"></i></span>
+</div>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-charcoal-200/70 transition-all">
+  <div class="container mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-3 group">
+      <div class="w-10 h-10 rounded-full border-2 border-gold-500 flex items-center justify-center bg-gold-50 text-gold-700 text-lg font-serif font-bold group-hover:bg-gold-500 group-hover:text-white transition-colors">
+        <i class="fa-regular fa-gem"></i>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-serif text-2xl lg:text-3xl font-medium tracking-wide text-charcoal-900 group-hover:text-gold-600 transition-colors leading-tight">Teresa Mackenzie</span>
+        <span class="text-[8px] uppercase tracking-[0.3em] text-gold-600 font-bold mt-0.5">Gemological Appraisals &amp; Fine Jewelry</span>
+      </div>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-charcoal-700">
+      <a href="#home" class="border-b-2 border-gold-500 pb-1 hover-gold-underline" data-nav="home">Home</a>
+      <a href="#about" class="hover-gold-underline" data-nav="about">About</a>
+      <a href="#services" class="hover-gold-underline" data-nav="services">Services</a>
+      <a href="#jewelry" class="hover-gold-underline" data-nav="jewelry">Our Jewelry</a>
+      <a href="#testimonials" class="hover-gold-underline" data-nav="testimonials">Testimonials</a>
+      <a href="#contact" class="hover-gold-underline" data-nav="contact">Contact</a>
+    </nav>
+
+    <div class="hidden lg:block">
+      <a href="#contact" class="border border-charcoal-900 bg-white hover:bg-charcoal-900 hover:text-white text-charcoal-900 font-bold tracking-wider uppercase text-[9px] px-5 py-2.5 transition-all duration-300">
+        <i class="fa-regular fa-calendar-check mr-1.5"></i> Schedule
+      </a>
+    </div>
+
+    <button id="mobileMenuBtn" class="lg:hidden text-charcoal-800 focus:outline-none p-1">
+      <i class="fa-solid fa-bars-staggered text-xl"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════ MOBILE MENU ═══════════════════ -->
+<div class="backdrop" id="menuBackdrop"></div>
+<div class="mobile-menu" id="sideMenu">
+  <div class="flex justify-between items-center pb-6 border-b border-charcoal-200">
+    <span class="font-serif text-xl font-medium">Teresa Mackenzie</span>
+    <button id="closeMenuBtn" class="text-charcoal-500 hover:text-gold-600 text-2xl">&times;</button>
+  </div>
+  <nav class="flex flex-col gap-5 mt-8 text-xs font-bold uppercase tracking-widest text-charcoal-600">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#jewelry">Our Jewelry</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="mt-auto pt-6 border-t border-charcoal-200 text-[9px] text-charcoal-400 tracking-wider">
+    <p>© 2026 Teresa Mackenzie</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO (Reduced text, minimal) ═══════════════════ -->
+<section class="hero-slideshow flex items-center justify-center" id="home" style="min-height: 70vh;">
+  <div class="slide-bg active" style="background-image: url('gem1.jpg');"></div>
+  <div class="slide-bg" style="background-image: url('gem3.jpg');"></div>
+  <div class="slide-bg" style="background-image: url('gem2.jpg');"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="container mx-auto px-6 lg:px-16 relative z-10 text-center">
+    <div class="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm px-6 py-8 md:px-10 md:py-10 border border-white/20 shadow-2xl rounded-sm">
+      <span class="text-[10px] uppercase tracking-[0.3em] font-bold text-gold-200">Trusted Since 2010</span>
+      <h1 class="font-serif text-4xl md:text-6xl font-light text-white leading-tight mt-2">
+        Precision. Integrity. <br /><span class="font-semibold text-gold-300">Trust.</span>
+      </h1>
+      <!-- Short, minimal tagline – no lengthy paragraph -->
+      <p class="text-white/80 text-sm md:text-base font-light mt-4 max-w-md mx-auto leading-relaxed">
+        Expert gemological appraisals and fine jewelry.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 mt-8 text-[10px] uppercase tracking-widest font-bold">
+        <a href="#contact" class="btn-primary px-8 py-3.5 shadow-md inline-flex items-center gap-2">
+          <i class="fa-regular fa-calendar-check"></i> Book an Appraisal
+        </a>
+        <a href="#about" class="btn-outline-light px-8 py-3.5">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ABOUT ═══════════════════ -->
+<section class="py-20 bg-white border-b border-charcoal-200" id="about">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-7 space-y-6 order-2 lg:order-1">
+        <div class="section-subtitle">About Teresa Mackenzie</div>
+        <h2 class="font-serif text-4xl font-semibold text-charcoal-900 leading-tight">
+          Teresa Mackenzie<br />
+          <span class="block text-base font-sans font-normal text-charcoal-500 tracking-widest uppercase mt-1">Licensed Gemological Appraiser · Diamond Grader</span>
+        </h2>
+        <div class="gold-line"></div>
+        <div class="font-serif text-base md:text-lg text-charcoal-700 leading-relaxed space-y-4">
+          <p>Welcome to my world of gemstones. I am a <strong class="text-charcoal-900">licensed independent gemological appraiser</strong> and gemstone dealer (distributor) that offers professional, fair and accurate diamond grading and jewelry appraisals.</p>
+          <p>For more than <strong class="text-charcoal-900">15 years</strong>, I have provided both the jewellery trade and retail consumers with the highest quality of service and reliable assessments. My dedication to my craft and commitment to integrity is what sets me apart and has earned me a high-quality reputation in my field.</p>
+          <p class="text-gold-700 font-semibold">Every piece tells a story — I help you tell it with confidence.</p>
+        </div>
+        <div class="pt-3 flex items-center gap-3">
+          <span class="w-8 h-px bg-charcoal-300"></span>
+          <span class="text-[10px] uppercase tracking-wider font-bold text-charcoal-500">— Teresa Mackenzie, Principal Gemologist</span>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 relative flex justify-center order-1 lg:order-2">
+        <div class="p-3 bg-white border border-charcoal-200 shadow-sm max-w-sm w-full">
+          <img src="client.jpeg" alt="Teresa Mackenzie" class="w-full object-cover aspect-[4/5] shadow-sm" />
+          <div class="mt-4 text-center bg-charcoal-50 py-3 border border-charcoal-100">
+            <h4 class="font-serif text-xl font-bold text-charcoal-900">Teresa Mackenzie</h4>
+            <p class="text-[9px] text-gold-700 uppercase tracking-widest font-bold mt-1">Licensed Appraiser · Gemstone Dealer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STATS ═══════════════════ -->
+<section class="py-12 bg-charcoal-50 border-b border-charcoal-200">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center">
+      <div><div class="font-serif text-3xl font-medium text-charcoal-900">15+</div><p class="text-[9px] text-charcoal-500 uppercase tracking-widest font-bold mt-1">Years of Excellence</p></div>
+      <div><div class="font-serif text-3xl font-medium text-charcoal-900">5,000+</div><p class="text-[9px] text-charcoal-500 uppercase tracking-widest font-bold mt-1">Appraisals Completed</p></div>
+      <div><div class="font-serif text-3xl font-medium text-charcoal-900">100%</div><p class="text-[9px] text-charcoal-500 uppercase tracking-widest font-bold mt-1">Client Confidence</p></div>
+      <div><div class="font-serif text-3xl font-medium text-charcoal-900">A+</div><p class="text-[9px] text-charcoal-400 uppercase tracking-widest font-bold mt-1">BBB Accredited</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<section class="py-20 bg-white border-b border-charcoal-200" id="services">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="section-subtitle">Our Expertise</span>
+      <h2 class="section-title text-charcoal-900 mt-2">Services You Can Rely On</h2>
+      <div class="gold-line"></div>
+      <p class="text-charcoal-600 font-medium text-sm">Independent, impartial, and meticulously accurate — every assessment is backed by decades of experience.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-luxury p-8 text-center">
+        <div class="w-14 h-14 rounded-full border border-gold-500/40 flex items-center justify-center mx-auto mb-6 bg-gold-50"><i class="fa-regular fa-gem text-gold-600 text-xl"></i></div>
+        <h4 class="font-serif text-xl font-semibold text-charcoal-900 mb-2">Diamond Grading</h4>
+        <p class="text-charcoal-600 text-sm font-medium leading-relaxed">Precise 4C evaluations — Cut, Color, Clarity, Carat — using GIA standards. Certified grading reports for insurance, resale, or personal knowledge.</p>
+      </div>
+      <div class="card-luxury p-8 text-center">
+        <div class="w-14 h-14 rounded-full border border-gold-500/40 flex items-center justify-center mx-auto mb-6 bg-gold-50"><i class="fa-regular fa-clipboard text-gold-600 text-xl"></i></div>
+        <h4 class="font-serif text-xl font-semibold text-charcoal-900 mb-2">Jewelry Appraisals</h4>
+        <p class="text-charcoal-600 text-sm font-medium leading-relaxed">Comprehensive written appraisals for estate planning, insurance coverage, equitable distribution, and donation valuations. Fully documented and defensible.</p>
+      </div>
+      <div class="card-luxury p-8 text-center">
+        <div class="w-14 h-14 rounded-full border border-gold-500/40 flex items-center justify-center mx-auto mb-6 bg-gold-50"><i class="fa-regular fa-gem text-gold-600 text-xl"></i></div>
+        <h4 class="font-serif text-xl font-semibold text-charcoal-900 mb-2">Gemstone Dealing</h4>
+        <p class="text-charcoal-600 text-sm font-medium leading-relaxed">Direct access to ethically sourced colored gemstones — sapphire, ruby, emerald, and more. Wholesale pricing for the trade and bespoke selection for collectors.</p>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+      <div class="card-luxury p-8 text-center">
+        <div class="w-14 h-14 rounded-full border border-gold-500/40 flex items-center justify-center mx-auto mb-6 bg-gold-50"><i class="fa-regular fa-building text-gold-600 text-xl"></i></div>
+        <h4 class="font-serif text-xl font-semibold text-charcoal-900 mb-2">Trade Services</h4>
+        <p class="text-charcoal-600 text-sm font-medium leading-relaxed">Bulk diamond grading, sourcing, and inventory valuation for retailers, auction houses, and estate liquidators. Confidential and efficient.</p>
+      </div>
+      <div class="card-luxury p-8 text-center">
+        <div class="w-14 h-14 rounded-full border border-gold-500/40 flex items-center justify-center mx-auto mb-6 bg-gold-50"><i class="fa-regular fa-circle-check text-gold-600 text-xl"></i></div>
+        <h4 class="font-serif text-xl font-semibold text-charcoal-900 mb-2">Insurance &amp; Estate Reports</h4>
+        <p class="text-charcoal-600 text-sm font-medium leading-relaxed">Detailed, photographically documented reports tailored for insurers, executors, and beneficiaries. Recognized by leading underwriters nationwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ OUR JEWELRY (with Read More toggle) ═══════════════════ -->
+<section class="py-20 bg-charcoal-50 border-b border-charcoal-200" id="jewelry">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="section-subtitle">Our Collection</span>
+      <h2 class="section-title text-charcoal-900 mt-2">Exquisitely Crafted Jewelry</h2>
+      <div class="gold-line"></div>
+      <p class="text-charcoal-600 font-medium text-sm">Each piece reflects timeless elegance, superior craftsmanship, and ethical sourcing.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Engagement Rings -->
+      <div class="card-luxury overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80" alt="Engagement Rings" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div class="p-6">
+          <h4 class="font-serif text-xl font-semibold text-charcoal-900">Engagement Rings</h4>
+          <p class="text-charcoal-600 text-sm font-medium mt-1 leading-relaxed">Exquisitely crafted engagement rings featuring ethically sourced diamonds, timeless designs, and bespoke settings.</p>
+          <div class="read-more-content" id="more-rings">
+            <p>Each ring is handcrafted with precision, available in platinum, white gold, yellow gold, and rose gold. Our master jewelers ensure every detail reflects your unique love story. We also offer custom design services to bring your vision to life.</p>
+          </div>
+          <button class="read-more-btn inline-block mt-4 text-[10px] uppercase tracking-widest font-bold text-gold-600 hover:text-charcoal-900 transition-colors" data-target="more-rings">
+            Read More <i class="fa-solid fa-arrow-right-long ml-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Necklaces -->
+      <div class="card-luxury overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80" alt="Necklaces" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div class="p-6">
+          <h4 class="font-serif text-xl font-semibold text-charcoal-900">Necklaces</h4>
+          <p class="text-charcoal-600 text-sm font-medium mt-1 leading-relaxed">Elegant necklaces handcrafted with exceptional gemstones and precious metals, designed to illuminate your presence.</p>
+          <div class="read-more-content" id="more-necklaces">
+            <p>Our necklace collections feature sapphires, rubies, emeralds, and diamonds set in intricate designs. Whether a statement piece or a delicate chain, each necklace is crafted to enhance your natural beauty. Custom lengths and gemstone selections are available.</p>
+          </div>
+          <button class="read-more-btn inline-block mt-4 text-[10px] uppercase tracking-widest font-bold text-gold-600 hover:text-charcoal-900 transition-colors" data-target="more-necklaces">
+            Read More <i class="fa-solid fa-arrow-right-long ml-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bracelets -->
+      <div class="card-luxury overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=600&q=80" alt="Bracelets" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div class="p-6">
+          <h4 class="font-serif text-xl font-semibold text-charcoal-900">Bracelets</h4>
+          <p class="text-charcoal-600 text-sm font-medium mt-1 leading-relaxed">Graceful bracelets crafted in fine gold and platinum, adorned with brilliant gemstones, offering timeless elegance.</p>
+          <div class="read-more-content" id="more-bracelets">
+            <p>Our bracelets range from classic tennis bracelets to modern cuff designs, featuring diamonds, sapphires, and other precious stones. Each piece is designed for comfort and durability, perfect for daily wear or special occasions. Engraving services are also offered.</p>
+          </div>
+          <button class="read-more-btn inline-block mt-4 text-[10px] uppercase tracking-widest font-bold text-gold-600 hover:text-charcoal-900 transition-colors" data-target="more-bracelets">
+            Read More <i class="fa-solid fa-arrow-right-long ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ OUR CRAFTS ═══ -->
+    <div class="mt-16">
+      <div class="text-center mb-10">
+        <span class="section-subtitle">Our Crafts</span>
+        <h3 class="font-serif text-2xl font-light text-charcoal-900 mt-1">Featured Pieces</h3>
+        <div class="gold-line"></div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="bg-white p-4 border border-charcoal-200 text-center hover:border-gold-500 transition-colors">
+          <img src="craft3.jpg" alt="AGJS-RG-00503" class="w-full h-32 object-cover rounded mb-2" />
+          <p class="text-[10px] font-bold tracking-wider text-charcoal-700">AGJS-RG-00503</p>
+        </div>
+        <div class="bg-white p-4 border border-charcoal-200 text-center hover:border-gold-500 transition-colors">
+          <img src="gem2.jpg" alt="AGJS-RG-00504" class="w-full h-32 object-cover rounded mb-2" />
+          <p class="text-[10px] font-bold tracking-wider text-charcoal-700">AGJS-RG-00504</p>
+        </div>
+        <div class="bg-white p-4 border border-charcoal-200 text-center hover:border-gold-500 transition-colors">
+          <img src="gem3.jpg" alt="AGJS-RG-00412" class="w-full h-32 object-cover rounded mb-2" />
+          <p class="text-[10px] font-bold tracking-wider text-charcoal-700">AGJS-RG-00412</p>
+        </div>
+        <div class="bg-white p-4 border border-charcoal-200 text-center hover:border-gold-500 transition-colors">
+          <img src="craft1.jpg" alt="AGJS-RG-00415" class="w-full h-32 object-cover rounded mb-2" />
+          <p class="text-[10px] font-bold tracking-wider text-charcoal-700">AGJS-RG-00415</p>
+        </div>
+        <div class="bg-white p-4 border border-charcoal-200 text-center hover:border-gold-500 transition-colors">
+          <img src="craft2.jpg" alt="AGJS-RG-00414" class="w-full h-32 object-cover rounded mb-2" />
+          <p class="text-[10px] font-bold tracking-wider text-charcoal-700">AGJS-RG-00414</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
+<section class="py-20 bg-white border-t border-b border-charcoal-200" id="testimonials">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="section-subtitle">Client Voices</span>
+      <h2 class="section-title text-charcoal-900 mt-2">What Our Clients Say</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-luxury p-8 flex flex-col">
+        <div class="flex text-gold-500 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="font-serif text-base italic text-charcoal-700 flex-1 leading-relaxed">"Teresa's appraisal was meticulous, thorough, and delivered with complete transparency. Her expertise gave me the confidence to insure my heirloom pieces properly."</p>
+        <div class="mt-4 pt-4 border-t border-charcoal-100"><p class="text-[10px] font-bold uppercase tracking-wider text-charcoal-900">— Sarah W., Private Collector</p></div>
+      </div>
+      <div class="card-luxury p-8 flex flex-col">
+        <div class="flex text-gold-500 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="font-serif text-base italic text-charcoal-700 flex-1 leading-relaxed">"We've worked with Teresa for over a decade on estate valuations. Her reports are consistently accurate, well-documented, and respected by our legal team and insurers."</p>
+        <div class="mt-4 pt-4 border-t border-charcoal-100"><p class="text-[10px] font-bold uppercase tracking-wider text-charcoal-900">— James K., Estate Attorney</p></div>
+      </div>
+      <div class="card-luxury p-8 flex flex-col">
+        <div class="flex text-gold-500 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="font-serif text-base italic text-charcoal-700 flex-1 leading-relaxed">"As a retailer, I rely on Teresa for bulk grading and sourcing. Her integrity and pricing are unmatched — she's an essential partner in my business."</p>
+        <div class="mt-4 pt-4 border-t border-charcoal-100"><p class="text-[10px] font-bold uppercase tracking-wider text-charcoal-900">— Michael R., Jewelry Retailer</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ NEWSLETTER ═══════════════════ -->
+<section class="py-16 bg-charcoal-50 border-b border-charcoal-200">
+  <div class="container mx-auto px-6 lg:px-16 text-center">
+    <div class="max-w-lg mx-auto">
+      <span class="section-subtitle">Stay Informed</span>
+      <h4 class="font-serif text-2xl font-light text-charcoal-900 mt-1">Subscribe to Our Newsletter</h4>
+      <p class="text-charcoal-600 text-sm font-medium mt-2">Get updates about new arrivals, market insights, and special offers.</p>
+      <form class="mt-6 flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
+        <input type="email" placeholder="Email address" required class="flex-1 px-4 py-3 border border-charcoal-300 bg-white text-charcoal-900 text-sm placeholder:text-charcoal-400 focus:outline-none focus:border-gold-500 transition" />
+        <button type="submit" class="btn-primary px-6 py-3 text-[10px] font-bold uppercase tracking-widest">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT (Updated: no emojis, new email) ═══════════════════ -->
+<section class="py-24 bg-white" id="contact">
+  <div class="container mx-auto px-6 lg:px-16 text-center">
+    <div class="max-w-2xl mx-auto border border-charcoal-200 bg-charcoal-50/40 p-10 md:p-14">
+      <h3 class="font-serif text-3xl font-light text-charcoal-900 mb-4">Schedule a Confidential Appraisal</h3>
+      <p class="text-charcoal-600 font-medium text-sm max-w-md mx-auto mb-8 leading-relaxed">
+        Whether you're a private collector, an estate executor, or a trade professional — I provide impartial, expert assessments you can trust.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 text-[10px] uppercase tracking-widest font-bold">
+        <a href="tel:2087021387" class="btn-primary px-8 py-3.5 inline-flex items-center gap-2"><i class="fa-solid fa-phone"></i> Call 208 702 1387</a>
+        <a href="mailto:teresa@mackenziegem.com" class="btn-outline px-8 py-3.5 inline-flex items-center gap-2"><i class="fa-regular fa-envelope"></i> Email Us</a>
+      </div>
+      <!-- Clean contact info – no emojis -->
+      <div class="mt-6 text-sm text-charcoal-500 font-medium tracking-wide">
+        <span class="inline-block mx-3">208 702 1387</span>
+        <span class="inline-block mx-3">303 622 8862</span>
+        <span class="inline-block mx-3">teresa@mackenziegem.com</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="bg-charcoal-900 text-charcoal-300 py-12 border-t border-gold-700/30">
+  <div class="container mx-auto px-6 lg:px-16">
+    <div class="grid md:grid-cols-4 gap-8 text-left pb-8 border-b border-charcoal-700/50">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 rounded-full border border-gold-500/50 flex items-center justify-center text-gold-500 text-sm font-serif font-bold bg-charcoal-800">
+            <i class="fa-regular fa-gem"></i>
+          </div>
+          <span class="font-serif text-lg font-medium text-white">Teresa Mackenzie</span>
+        </div>
+        <p class="text-[9px] text-charcoal-400 leading-relaxed">Gemological Appraisals &amp; Fine Jewelry</p>
+        <p class="text-[9px] text-charcoal-500 mt-2">© 2026 Teresa Mackenzie</p>
+      </div>
+      <div>
+        <h5 class="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Quick Links</h5>
+        <ul class="space-y-1.5 text-[10px] font-medium">
+          <li><a href="#home" class="hover:text-gold-400 transition-colors">Home</a></li>
+          <li><a href="#about" class="hover:text-gold-400 transition-colors">About</a></li>
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Services</a></li>
+          <li><a href="#jewelry" class="hover:text-gold-400 transition-colors">Our Jewelry</a></li>
+          <li><a href="#contact" class="hover:text-gold-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Services</h5>
+        <ul class="space-y-1.5 text-[10px] font-medium">
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Diamond Grading</a></li>
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Jewelry Appraisals</a></li>
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Gemstone Dealing</a></li>
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Trade Services</a></li>
+          <li><a href="#services" class="hover:text-gold-400 transition-colors">Insurance Reports</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Contact</h5>
+        <ul class="space-y-1.5 text-[10px] font-medium">
+          <li><span class="text-charcoal-400">Tel:</span> <a href="tel:2087021387" class="hover:text-gold-400 transition-colors">208 702 1387</a></li>
+          <li><span class="text-charcoal-400">Phone:</span> <a href="tel:3036228862" class="hover:text-gold-400 transition-colors">303 622 8862</a></li>
+          <li><span class="text-charcoal-400">Email:</span> <a href="mailto:teresa@mackenziegem.com" class="hover:text-gold-400 transition-colors">teresa@mackenziegem.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-[8px] text-charcoal-500 font-medium uppercase tracking-widest">
+      <p>© 2026 Teresa Mackenzie — All rights reserved.</p>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-gold-400 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-gold-400 transition-colors">Terms of Use</a>
+        <a href="#" class="hover:text-gold-400 transition-colors">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+  (function() {
+    // ─── Hero Slideshow ───
+    let current = 0;
+    const slides = document.querySelectorAll('.slide-bg');
+    if (slides.length) {
+      setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }, 5000);
+    }
+
+    // ─── Mobile Menu ───
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const backdrop = document.getElementById('menuBackdrop');
+    const closeBtn = document.getElementById('closeMenuBtn');
+
+    function openMenu() { sideMenu.classList.add('open'); backdrop.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+    function closeMenu() { sideMenu.classList.remove('open'); backdrop.classList.remove('visible'); document.body.style.overflow = ''; }
+    menuBtn?.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop?.addEventListener('click', closeMenu);
+    document.querySelectorAll('#sideMenu a').forEach(link => link.addEventListener('click', closeMenu));
+
+    // ─── Scroll Reveal ───
+    const reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      reveals.forEach(el => observer.observe(el));
+    }
+
+    // ─── Read More Toggle ───
+    document.querySelectorAll('.read-more-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('data-target');
+        const content = document.getElementById(targetId);
+        if (content) {
+          content.classList.toggle('open');
+          this.innerHTML = content.classList.contains('open') ?
+            'Read Less <i class="fa-solid fa-arrow-up-long ml-1"></i>' :
+            'Read More <i class="fa-solid fa-arrow-right-long ml-1"></i>';
+        }
+      });
+    });
+
+    // ─── Dropdown Navigation ───
+    const summaryMap = {
+      home: {
+        title: '✦ Highlights',
+        items: [
+          { icon: 'fa-regular fa-gem', title: 'Principal Gemologist', desc: 'Teresa Mackenzie – 15+ years expertise', link: '#about' },
+          { icon: 'fa-regular fa-clipboard', title: 'Appraisal Excellence', desc: 'Accurate, impartial, documented', link: '#services' },
+          { icon: 'fa-regular fa-star', title: 'Client Trust', desc: '5,000+ appraisals completed', link: '#testimonials' }
+        ]
+      },
+      about: {
+        title: '✦ About Teresa',
+        items: [
+          { icon: 'fa-regular fa-user', title: 'Teresa Mackenzie', desc: 'Licensed Appraiser', link: '#about' },
+          { icon: 'fa-regular fa-clock', title: '15+ Years', desc: 'Trade & consumer service', link: '#about' },
+          { icon: 'fa-regular fa-handshake', title: 'Commitment to Integrity', desc: 'High-quality reputation', link: '#about' }
+        ]
+      },
+      services: {
+        title: '✦ Our Services',
+        items: [
+          { icon: 'fa-regular fa-gem', title: 'Diamond Grading', desc: 'GIA-standard 4C evaluations', link: '#services' },
+          { icon: 'fa-regular fa-clipboard', title: 'Jewelry Appraisals', desc: 'Insurance & estate reports', link: '#services' },
+          { icon: 'fa-regular fa-building', title: 'Trade Services', desc: 'Bulk grading & sourcing', link: '#services' }
+        ]
+      },
+      jewelry: {
+        title: '✦ Our Collection',
+        items: [
+          { icon: 'fa-regular fa-ring', title: 'Engagement Rings', desc: 'Timeless designs', link: '#jewelry' },
+          { icon: 'fa-regular fa-gem', title: 'Necklaces', desc: 'Elegant & sophisticated', link: '#jewelry' },
+          { icon: 'fa-regular fa-star', title: 'Bracelets', desc: 'Graceful & distinct', link: '#jewelry' }
+        ]
+      },
+      testimonials: {
+        title: '✦ Client Voices',
+        items: [
+          { icon: 'fa-regular fa-star', title: 'Private Collector', desc: '"Meticulous & thorough"', link: '#testimonials' },
+          { icon: 'fa-regular fa-star', title: 'Estate Attorney', desc: '"Accurate & well-documented"', link: '#testimonials' },
+          { icon: 'fa-regular fa-star', title: 'Retailer', desc: '"Integrity & pricing unmatched"', link: '#testimonials' }
+        ]
+      },
+      contact: {
+        title: '✦ Connect',
+        items: [
+          { icon: 'fa-solid fa-phone', title: 'Call Us', desc: '208 702 1387', link: '#contact' },
+          { icon: 'fa-regular fa-envelope', title: 'Email', desc: 'teresa@mackenziegem.com', link: '#contact' },
+          { icon: 'fa-regular fa-calendar-check', title: 'Schedule', desc: 'Confidential appraisal', link: '#contact' }
+        ]
+      }
+    };
+
+    function getKey(el) {
+      const href = el.getAttribute('href') || '';
+      const txt = el.textContent.trim().toLowerCase();
+      if (href.includes('services') || txt === 'services') return 'services';
+      if (href.includes('about')) return 'about';
+      if (href.includes('jewelry')) return 'jewelry';
+      if (href.includes('testimonials')) return 'testimonials';
+      if (href.includes('contact')) return 'contact';
+      return 'home';
+    }
+
+    let activeDropdown = null;
+    let hideTimer = null;
+
+    function removeDropdown() { if (activeDropdown && activeDropdown.parentNode) activeDropdown.remove(); activeDropdown = null; }
+
+    function createDropdown(link, data) {
+      removeDropdown();
+      const div = document.createElement('div');
+      div.className = 'nav-dropdown';
+      div.innerHTML = `<div class="dropdown-header">${data.title}</div><div class="py-1"></div>`;
+      const inner = div.querySelector('.py-1');
+      data.items.forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'dropdown-item';
+        a.href = item.link;
+        a.innerHTML = `<div class="icon"><i class="${item.icon}"></i></div><div><div class="title">${item.title}</div><div class="desc">${item.desc}</div></div>`;
+        inner.appendChild(a);
+        a.addEventListener('click', () => setTimeout(removeDropdown, 100));
+      });
+      document.body.appendChild(div);
+      const rect = link.getBoundingClientRect();
+      div.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+      div.style.left = (rect.left + window.scrollX - 12) + 'px';
+      setTimeout(() => div.classList.add('active'), 10);
+      return div;
+    }
+
+    const navLinks = document.querySelectorAll('nav.hidden.lg\\:flex a');
+    navLinks.forEach(link => {
+      const key = getKey(link);
+      if (!key || !summaryMap[key]) return;
+      let dropdown = null, timer = null;
+
+      link.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimer);
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          dropdown = createDropdown(link, summaryMap[key]);
+          activeDropdown = dropdown;
+          dropdown.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+          dropdown.addEventListener('mouseleave', () => {
+            hideTimer = setTimeout(() => { if (dropdown && activeDropdown === dropdown) removeDropdown(); dropdown = null; }, 150);
+          });
+        }, 60);
+      });
+      link.addEventListener('mouseleave', () => {
+        clearTimeout(timer);
+        hideTimer = setTimeout(() => {
+          if (dropdown && activeDropdown === dropdown) removeDropdown();
+          dropdown = null;
+        }, 150);
+      });
+    });
+
+    window.addEventListener('scroll', removeDropdown);
+    window.addEventListener('resize', removeDropdown);
+  })();
+</script>
+
+</body>
+</html>
