@@ -329,12 +329,11 @@
 
   <div class="container mx-auto px-6 lg:px-16 relative z-10 text-center">
     <div class="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm px-6 py-8 md:px-10 md:py-10 border border-white/20 shadow-2xl rounded-sm">
-      <span class="text-[10px] uppercase tracking-[0.3em] font-bold text-gold-200">Trusted Since 2010</span>
-      <h1 class="font-serif text-4xl md:text-6xl font-light text-white leading-tight mt-2">
+      <span id="heroKicker" class="text-[10px] uppercase tracking-[0.3em] font-bold text-gold-200">Trusted Since 2010</span>
+      <h1 id="heroHeadline" class="font-serif text-4xl md:text-6xl font-light text-white leading-tight mt-2">
         Precision. Integrity. <br /><span class="font-semibold text-gold-300">Trust.</span>
       </h1>
-      <!-- Short, minimal tagline – no lengthy paragraph -->
-      <p class="text-white/80 text-sm md:text-base font-light mt-4 max-w-md mx-auto leading-relaxed">
+      <p id="heroSubcopy" class="text-white/80 text-sm md:text-base font-light mt-4 max-w-md mx-auto leading-relaxed">
         Expert gemological appraisals and fine jewelry.
       </p>
       <div class="flex flex-wrap justify-center gap-4 mt-8 text-[10px] uppercase tracking-widest font-bold">
@@ -819,6 +818,40 @@
 
     window.addEventListener('scroll', removeDropdown);
     window.addEventListener('resize', removeDropdown);
+
+    // ─── Dynamic Hero Copy ───
+    const heroRotator = [
+      {
+        kicker: 'Trusted Since 2010',
+        headline: 'Precision. Integrity. <span class="font-semibold text-gold-300">Trust.</span>',
+        subcopy: 'Expert gemological appraisals and fine jewelry.'
+      },
+      {
+        kicker: 'Insured & Estate-Ready',
+        headline: 'Clear Reports. <span class="font-semibold text-gold-300">Confident Values.</span>',
+        subcopy: 'Documented valuations tailored for insurers, estate planning, and collectors.'
+      },
+      {
+        kicker: 'Trade to Retail',
+        headline: 'Ethical Sourcing. <span class="font-semibold text-gold-300">Crafted Excellence.</span>',
+        subcopy: 'Diamond grading and gemstone dealing for retailers and private clients.'
+      }
+    ];
+
+    const kickerEl = document.getElementById('heroKicker');
+    const headlineEl = document.getElementById('heroHeadline');
+    const subcopyEl = document.getElementById('heroSubcopy');
+
+    if (kickerEl && headlineEl && subcopyEl && heroRotator.length > 1) {
+      let heroIndex = 0;
+      setInterval(() => {
+        heroIndex = (heroIndex + 1) % heroRotator.length;
+        const item = heroRotator[heroIndex];
+        kickerEl.textContent = item.kicker;
+        headlineEl.innerHTML = item.headline;
+        subcopyEl.textContent = item.subcopy;
+      }, 5500);
+    }
   })();
 </script>
 
